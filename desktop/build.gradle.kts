@@ -18,6 +18,7 @@ kotlin {
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.0")
             implementation("org.jetbrains.compose.material3:material3:1.7.0")
             implementation("org.jetbrains.compose.ui:ui:1.7.0")
+            implementation("org.jetbrains.compose.desktop:desktop:1.7.0")
             
             // Koin for Desktop (koin.compose depends on AndroidX, not compatible with Desktop)
             implementation(libs.koin.core)
@@ -26,4 +27,8 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.10.2")
         }
     }
+}
+
+application {
+    mainClass.set("com.zx_tole.lineage2_guide.DesktopAppKt")
 }
