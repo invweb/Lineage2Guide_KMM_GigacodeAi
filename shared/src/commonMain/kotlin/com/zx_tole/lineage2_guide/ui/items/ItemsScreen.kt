@@ -22,8 +22,7 @@ import com.zx_tole.lineage2_guide.ui.common.SyncIndicator
 import com.zx_tole.lineage2_guide.ui.common.components.RarityBadge
 import com.zx_tole.lineage2_guide.ui.common.components.SearchBar
 import com.zx_tole.lineage2_guide.ui.common.components.getRarityColor
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,6 +32,22 @@ fun ItemsScreen(
     onNavigateToClassDetail: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
+    var filteredItems by remember(uiState.items, searchQuery) {
+        mutableStateOf(uiState.items)
+    }
+
+    // Filter items when searchQuery or items change
+    LaunchedEffect(searchQuery, uiState.items) {
+        if (searchQuery.isBlank()) {
+            filteredItems = uiState.items
+        } else {
+            filteredItems = uiState.items.filter { item ->
+                item.name.contains(searchQuery, ignoreCase = true) ||
+                    item.description?.contains(searchQuery, ignoreCase = true) == true
+            }
+        }
+    }
 
     when {
         uiState.isLoading -> {
@@ -50,10 +65,10 @@ fun ItemsScreen(
         }
         else -> {
             ItemsSuccessScreen(
-                items = uiState.items,
+                items = filteredItems,
                 isRefreshing = uiState.isRefreshing,
-                searchQuery = uiState.searchQuery,
-                onSearchQueryChanged = viewModel::onSearchQueryChanged,
+                searchQuery = searchQuery,
+                onSearchQueryChanged = { searchQuery = it },
                 onRefresh = viewModel::refresh,
                 onItemClicked = onNavigateToDetail,
                 onClassClick = onNavigateToClassDetail
@@ -104,9 +119,7 @@ private fun ItemsSuccessScreen(
             )
 
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
+                modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {

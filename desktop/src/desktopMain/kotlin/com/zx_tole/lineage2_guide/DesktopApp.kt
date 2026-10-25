@@ -5,6 +5,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
+import com.zx_tole.lineage2_guide.common.Logger
 import com.zx_tole.lineage2_guide.di.KoinHelper
 import com.zx_tole.lineage2_guide.ui.items.ItemDetailViewModel
 import com.zx_tole.lineage2_guide.ui.items.ItemsViewModel
@@ -21,7 +22,7 @@ import com.zx_tole.lineage2_guide.ui.theme.Lineage2Theme
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-private const val DEFAULT_BASE_URL = "http://localhost:8080"
+private const val DEFAULT_BASE_URL = "http://localhost:8080/api/v1"
 
 object DesktopKoinManager : KoinComponent {
     val itemsViewModel: ItemsViewModel
@@ -71,7 +72,18 @@ fun DesktopAppContent() {
 }
 
 fun main() {
+    Logger.i("Starting Desktop application...")
+    Logger.i("Base URL: $DEFAULT_BASE_URL")
+    
     DesktopKoinManager.init()
+    Logger.i("Koin initialized: ${KoinHelper.initialized}")
+    
+    try {
+        val itemsVm = DesktopKoinManager.itemsViewModel
+        Logger.i("ItemsViewModel loaded successfully")
+    } catch (e: Exception) {
+        Logger.e("Failed to load ItemsViewModel", e)
+    }
     
     application {
         Window(
@@ -82,4 +94,5 @@ fun main() {
             DesktopAppContent()
         }
     }
+    Logger.i("Application started")
 }

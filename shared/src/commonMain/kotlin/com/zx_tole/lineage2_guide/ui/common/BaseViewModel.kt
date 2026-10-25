@@ -14,7 +14,7 @@ abstract class BaseViewModel {
 
     protected val viewModelScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    protected fun <T> MutableStateFlow<T>.asStateFlow(): StateFlow<T> = this.asStateFlow()
+    // asStateFlow() уже есть в kotlinx.coroutines.flow, не нужен
 
     protected fun logError(message: String, throwable: Throwable? = null) {
         if (throwable != null) {

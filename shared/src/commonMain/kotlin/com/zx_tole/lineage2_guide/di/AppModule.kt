@@ -1,6 +1,5 @@
 package com.zx_tole.lineage2_guide.di
 
-import com.zx_tole.lineage2_guide.data.local.Lineage2Database
 import com.zx_tole.lineage2_guide.data.mapper.*
 import com.zx_tole.lineage2_guide.data.network.Lineage2ApiService
 import com.zx_tole.lineage2_guide.data.network.createHttpClient
@@ -44,11 +43,11 @@ fun mapperModule(): Module = module {
 }
 
 fun repositoryModule(): Module = module {
-    single { ItemsRepositoryImpl(get(), get()) }
-    single { QuestsRepositoryImpl(get(), get()) }
-    single { SkillsRepositoryImpl(get(), get()) }
-    single { ClassesRepositoryImpl(get(), get()) }
-    single { NpcsRepositoryImpl(get(), get()) }
+    single<ItemsRepository> { ItemsRepositoryImpl(get(), get()) }
+    single<QuestsRepository> { QuestsRepositoryImpl(get(), get()) }
+    single<SkillsRepository> { SkillsRepositoryImpl(get(), get()) }
+    single<ClassesRepository> { ClassesRepositoryImpl(get(), get()) }
+    single<NpcsRepository> { NpcsRepositoryImpl(get(), get()) }
 }
 
 fun useCaseModule(): Module = module {

@@ -11,7 +11,7 @@ object ServerMockData {
     // 3. Place .gz files in server/src/main/resources/
     // 4. Change 'useRealData' to true below
     
-    private val useRealData = false
+    private val useRealData = true
     
     val items by lazy { if (useRealData) RealDataLoader.loadItems() else mockItems }
     val quests by lazy { if (useRealData) RealDataLoader.loadQuests() else mockQuests }
