@@ -1,11 +1,11 @@
 package com.zx_tole.lineage2_guide.ui.navigation
 
-sealed class Screen(val route: String) {
-    object Items : Screen("items")
-    object Quests : Screen("quests")
-    object Skills : Screen("skills")
-    object Classes : Screen("classes")
-    object Npcs : Screen("npcs")
+sealed class Screen(val route: String, val title: String) {
+    object Items : Screen("items", "Items")
+    object Quests : Screen("quests", "Quests")
+    object Skills : Screen("skills", "Skills")
+    object Classes : Screen("classes", "Classes")
+    object Npcs : Screen("npcs", "NPCs")
     
     companion object {
         const val ITEM_DETAIL = "item_detail/{itemId}"

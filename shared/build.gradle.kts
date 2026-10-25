@@ -52,8 +52,8 @@ kotlin {
                 implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.kotlinx.serialization.json)
                 
-                // Database
-                implementation("com.squareup.sqldelight:runtime:1.5.3")
+                // Koin Compose (KMP-compatible)
+                implementation("io.insert-koin:koin-compose:4.0.0")
             }
         }
         val commonTest by getting {
@@ -67,31 +67,27 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.koin.android)
                 implementation(libs.timber)
-                implementation("com.squareup.sqldelight:android-driver:1.5.3")
+                implementation(libs.koin.compose)
             }
         }
         val iosArm64Main by getting {
             dependencies {
                 implementation(libs.ktor.client.darwin)
-                implementation("com.squareup.sqldelight:native-driver:1.5.3")
             }
         }
         val iosSimulatorArm64Main by getting {
             dependencies {
                 implementation(libs.ktor.client.darwin)
-                implementation("com.squareup.sqldelight:native-driver:1.5.3")
             }
         }
         val iosX64Main by getting {
             dependencies {
                 implementation(libs.ktor.client.darwin)
-                implementation("com.squareup.sqldelight:native-driver:1.5.3")
             }
         }
         val desktopMain by getting {
             dependencies {
                 implementation(libs.ktor.client.cio)
-                implementation("com.squareup.sqldelight:jdbc-driver:1.5.3")
             }
         }
     }

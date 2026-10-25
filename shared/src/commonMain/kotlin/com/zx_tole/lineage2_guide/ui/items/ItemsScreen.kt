@@ -14,23 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import org.koin.androidx.compose.koinViewModel
 import com.zx_tole.lineage2_guide.domain.model.*
-import com.zx_tole.lineage2_guide.ui.common.components.RarityBadge
-import com.zx_tole.lineage2_guide.ui.common.components.SearchBar
-import com.zx_tole.lineage2_guide.ui.common.components.getRarityColor
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
 import com.zx_tole.lineage2_guide.ui.common.LoadingScreen
 import com.zx_tole.lineage2_guide.ui.common.SyncIndicator
+import com.zx_tole.lineage2_guide.ui.common.components.RarityBadge
+import com.zx_tole.lineage2_guide.ui.common.components.SearchBar
+import com.zx_tole.lineage2_guide.ui.common.components.getRarityColor
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemsScreen(
-    viewModel: ItemsViewModel = koinViewModel(),
+    viewModel: ItemsViewModel,
     onNavigateToDetail: (Long) -> Unit = {},
     onNavigateToClassDetail: (String) -> Unit = {}
 ) {
@@ -58,7 +56,7 @@ fun ItemsScreen(
                 onSearchQueryChanged = viewModel::onSearchQueryChanged,
                 onRefresh = viewModel::refresh,
                 onItemClicked = onNavigateToDetail,
-                onClassClicked = onNavigateToClassDetail
+                onClassClick = onNavigateToClassDetail
             )
         }
     }
@@ -73,7 +71,7 @@ private fun ItemsSuccessScreen(
     onSearchQueryChanged: (String) -> Unit,
     onRefresh: () -> Unit,
     onItemClicked: (Long) -> Unit,
-    onClassClicked: (String) -> Unit
+    onClassClick: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -105,30 +103,27 @@ private fun ItemsSuccessScreen(
                 onClear = { onSearchQueryChanged("") }
             )
 
-            PullToRefreshBox(
-                isRefreshing = isRefreshing,
-                onRefresh = onRefresh,
-                modifier = Modifier.weight(1f)
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(items, key = { it.id }) { item ->
-                        ItemCard(
-                            item = item,
-                            onClick = { onItemClicked(item.id) },
-                            onClassClick = { onClassClicked(item.classRestriction ?: "") }
-                        )
-                    }
+                items(items, key = { it.id }) { item ->
+                    ItemCard(
+                        item = item,
+                        onClick = { onItemClicked(item.id) },
+                        onClassClick = { onClassClick(item.classRestriction ?: "") }
+                    )
+                }
 
-                    if (items.isEmpty()) {
-                        item {
-                            EmptyScreen(
-                                message = if (searchQuery.isNotBlank()) "No items match your search" else "No items found",
-                                icon = Icons.Default.Inventory2
-                            )
-                        }
+                if (items.isEmpty()) {
+                    item {
+                        EmptyScreen(
+                            message = if (searchQuery.isNotBlank()) "No items match your search" else "No items found",
+                            icon = Icons.Default.Inventory2
+                        )
                     }
                 }
             }

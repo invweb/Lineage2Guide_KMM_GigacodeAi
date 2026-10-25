@@ -1,24 +1,28 @@
-package com.zx_tole.lineage2_guide.ios.viewmodels
+package com.zx_tole.lineage2_guide.ui.items
 
+import com.zx_tole.lineage2_guide.domain.model.Item
 import com.zx_tole.lineage2_guide.domain.model.ItemsFilter
 import com.zx_tole.lineage2_guide.domain.repository.ItemsRepository
-import com.zx_tole.lineage2_guide.ui.items.ItemsUiState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.SupervisorJob
+import com.zx_tole.lineage2_guide.ui.common.BaseViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class IOSItemsViewModel(
+data class ItemsUiState(
+    val items: List<Item> = emptyList(),
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val searchQuery: String = "",
+    val isRefreshing: Boolean = false
+)
+
+class ItemsViewModel(
     private val itemsRepository: ItemsRepository
-) {
-    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    
-    private val allItems = MutableStateFlow<List<com.zx_tole.lineage2_guide.domain.model.Item>>(emptyList())
+) : BaseViewModel() {
+
+    private val allItems = MutableStateFlow<List<Item>>(emptyList())
     private val searchQueryFlow = MutableStateFlow("")
-    
-    private val filteredItems: StateFlow<List<com.zx_tole.lineage2_guide.domain.model.Item>> = searchQueryFlow
+
+    private val filteredItems: StateFlow<List<Item>> = searchQueryFlow
         .combine(allItems) { query, items ->
             if (query.isBlank()) {
                 items
@@ -29,8 +33,12 @@ class IOSItemsViewModel(
                 }
             }
         }
-        .stateIn(scope, SharingStarted.WhileSubscribed(5000), emptyList())
-    
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
     val uiState: StateFlow<ItemsUiState> = filteredItems
         .map { items ->
             ItemsUiState(
@@ -41,30 +49,34 @@ class IOSItemsViewModel(
                 isRefreshing = false
             )
         }
-        .stateIn(scope, SharingStarted.WhileSubscribed(5000), ItemsUiState(isLoading = true))
-    
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ItemsUiState(isLoading = true)
+        )
+
     init {
         loadItems()
     }
-    
+
     private fun loadItems() {
-        scope.launch {
+        viewModelScope.launch {
             try {
                 itemsRepository.getItems(ItemsFilter()).collect { items ->
                     allItems.value = items
                 }
             } catch (e: Exception) {
-                // Handle error
+                logError("Error in items load", e)
             }
         }
     }
-    
+
     fun onSearchQueryChanged(query: String) {
         searchQueryFlow.value = query
     }
-    
+
     fun refresh() {
-        scope.launch {
+        viewModelScope.launch {
             itemsRepository.refreshItems()
             loadItems()
         }

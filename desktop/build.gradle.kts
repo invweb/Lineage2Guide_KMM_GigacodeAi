@@ -6,19 +6,20 @@ plugins {
 group = "com.zx_tole.lineage2_guide"
 
 kotlin {
-    jvm()
-    
+    jvm("desktop")
+
     sourceSets {
-        val jvmMain = sourceSets.getByName("jvmMain") { }
-        jvmMain.dependencies {
+        val desktopMain = sourceSets.getByName("desktopMain")
+        desktopMain.dependencies {
             implementation(project(":shared"))
             
             // Compose Desktop
             implementation("org.jetbrains.compose.foundation:foundation:1.7.0")
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.0")
             implementation("org.jetbrains.compose.material3:material3:1.7.0")
+            implementation("org.jetbrains.compose.ui:ui:1.7.0")
             
-            // Koin for Desktop
+            // Koin for Desktop (koin.compose depends on AndroidX, not compatible with Desktop)
             implementation(libs.koin.core)
             
             // Coroutines
