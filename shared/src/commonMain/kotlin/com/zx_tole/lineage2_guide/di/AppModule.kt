@@ -15,6 +15,7 @@ import com.zx_tole.lineage2_guide.ui.npcs.NpcDetailViewModel
 import com.zx_tole.lineage2_guide.ui.npcs.NpcsViewModel
 import com.zx_tole.lineage2_guide.ui.quests.QuestDetailViewModel
 import com.zx_tole.lineage2_guide.ui.quests.QuestsViewModel
+import com.zx_tole.lineage2_guide.ui.settings.SettingsViewModel
 import com.zx_tole.lineage2_guide.ui.skills.SkillDetailViewModel
 import com.zx_tole.lineage2_guide.ui.skills.SkillsViewModel
 import org.koin.core.module.Module
@@ -69,6 +70,7 @@ fun viewModelModule(): Module = module {
     factory { SkillsViewModel(get()) }
     factory { ClassesViewModel(get()) }
     factory { NpcsViewModel(get()) }
+    factory { SettingsViewModel(get()) }
     factory { ItemDetailViewModel(get()) }
     factory { QuestDetailViewModel(get()) }
     factory { SkillDetailViewModel(get()) }
