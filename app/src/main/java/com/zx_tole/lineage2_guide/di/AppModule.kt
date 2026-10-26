@@ -1,6 +1,8 @@
 package com.zx_tole.lineage2_guide.di
 
 import com.zx_tole.lineage2_guide.BuildConfig
+import com.zx_tole.lineage2_guide.di.DefaultSettingsManager
+import com.zx_tole.lineage2_guide.data.settings.SettingsManager
 import com.zx_tole.lineage2_guide.ui.items.ItemsViewModel
 import com.zx_tole.lineage2_guide.ui.items.ItemDetailViewModel
 import com.zx_tole.lineage2_guide.ui.quests.QuestsViewModel
@@ -18,7 +20,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-fun appModule(baseUrl: String = BuildConfig.API_BASE_URL): List<Module> = listOf(
+fun appModule(): List<Module> = listOf(
     viewModelModule()
 )
 
@@ -35,9 +37,9 @@ fun viewModelModule(): Module = module {
     viewModel { NpcDetailViewModel(get()) }
 }
 
-fun initKoin(context: Context, baseUrl: String) {
+fun initKoin(context: Context, settingsManager: SettingsManager = DefaultSettingsManager()) {
     startKoin {
         androidContext(context)
-        modules(sharedModule(baseUrl) + appModule(baseUrl))
+        modules(sharedModule(settingsManager) + appModule())
     }
 }

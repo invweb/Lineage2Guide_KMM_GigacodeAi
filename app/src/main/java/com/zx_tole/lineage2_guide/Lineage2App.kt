@@ -3,6 +3,7 @@ package com.zx_tole.lineage2_guide
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.zx_tole.lineage2_guide.di.DefaultSettingsManager
 import com.zx_tole.lineage2_guide.di.initKoin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,16 +30,12 @@ class Lineage2App : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
-        val useMockServer = BuildConfig.DEBUG
-        val baseUrl = if (useMockServer) {
-            "http://192.168.0.8:8080/api/v1/" // Local server IP (use 10.0.2.2 for emulator)
-        } else {
-            BuildConfig.API_BASE_URL
-        }
+        // Use settings manager for configuration
+        val settingsManager = DefaultSettingsManager()
+        
+        Log.d("Lineage2App", "Starting Koin with baseUrl: ${settingsManager.baseUrl}")
 
-        Log.d("Lineage2App", "Starting Koin with baseUrl: $baseUrl")
-
-        initKoin(this, baseUrl)
+        initKoin(this, settingsManager)
 
         // Load initial data from server
         loadInitialData()
