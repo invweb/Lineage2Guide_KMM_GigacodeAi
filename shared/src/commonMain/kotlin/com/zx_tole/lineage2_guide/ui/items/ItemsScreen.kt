@@ -11,9 +11,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.zx_tole.lineage2_guide.data.icons.IconLoader
 import com.zx_tole.lineage2_guide.domain.model.*
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
@@ -184,6 +187,9 @@ fun ItemCard(
     onClassClick: () -> Unit
 ) {
     val rarityColor = getRarityColor(item.rarity)
+    
+    // Use iconUrl from model or generate one
+    val iconUrl = item.iconUrl ?: IconLoader.getItemIconUrl(item.id)
 
     Card(
         modifier = Modifier
@@ -209,26 +215,12 @@ fun ItemCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(rarityColor.copy(alpha = 0.2f), MaterialTheme.shapes.medium),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = when (item.type.name) {
-                        "WEAPON" -> Icons.Default.Star
-                        "ARMOR" -> Icons.Default.Shield
-                        "CONSUMABLE" -> Icons.Default.LocalPharmacy
-                        "SCROLL" -> Icons.Default.MenuBook
-                        "MATERIAL" -> Icons.Default.Inventory2
-                        else -> Icons.Default.Inventory2
-                    },
-                    contentDescription = null,
-                    tint = rarityColor,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
+            // Load icon with Coil
+            AsyncImage(
+                model = iconUrl,
+                contentDescription = item.name,
+                modifier = Modifier.size(48.dp)
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 

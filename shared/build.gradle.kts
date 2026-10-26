@@ -55,6 +55,10 @@ kotlin {
                 
                 // Koin Compose (KMP-compatible)
                 implementation("io.insert-koin:koin-compose:4.0.0")
+                
+                // Coil (image loading)
+                implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+                implementation("io.coil-kt.coil3:coil-compose-core:3.1.0")
             }
         }
         val commonTest by getting {

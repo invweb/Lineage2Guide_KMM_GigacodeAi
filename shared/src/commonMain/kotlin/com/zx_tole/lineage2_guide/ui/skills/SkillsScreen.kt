@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.zx_tole.lineage2_guide.data.icons.IconLoader
 import com.zx_tole.lineage2_guide.domain.model.Skill
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
@@ -122,6 +124,9 @@ private fun SkillCard(
     skill: Skill,
     onClick: () -> Unit
 ) {
+    // Use iconUrl from model or generate one
+    val iconUrl = skill.iconUrl ?: IconLoader.getSkillIconUrl(skill.id)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,12 +137,27 @@ private fun SkillCard(
         shape = MaterialTheme.shapes.medium
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = skill.name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Load skill icon
+                AsyncImage(
+                    model = iconUrl,
+                    contentDescription = "${skill.name} icon",
+                    modifier = Modifier.size(40.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = skill.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Class: ${skill.classRestriction}",
