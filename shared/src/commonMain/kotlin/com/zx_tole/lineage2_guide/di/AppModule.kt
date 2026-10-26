@@ -1,5 +1,6 @@
 package com.zx_tole.lineage2_guide.di
 
+import com.zx_tole.lineage2_guide.data.settings.SettingsManager
 import com.zx_tole.lineage2_guide.data.mapper.*
 import com.zx_tole.lineage2_guide.data.network.Lineage2ApiService
 import com.zx_tole.lineage2_guide.data.network.createHttpClient
@@ -19,19 +20,22 @@ import com.zx_tole.lineage2_guide.ui.skills.SkillsViewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-fun sharedModule(baseUrl: String): List<Module> = listOf(
-    networkModule(baseUrl),
+fun settingsModule(settingsManager: SettingsManager): Module = module {
+    single { settingsManager }
+}
+
+fun sharedModule(settingsManager: SettingsManager): List<Module> = listOf(
+    settingsModule(settingsManager),
+    networkModule(settingsManager),
     mapperModule(),
     repositoryModule(),
     viewModelModule(),
     useCaseModule()
 )
 
-fun getIOSModule(baseUrl: String): List<Module> = sharedModule(baseUrl)
-
-fun networkModule(baseUrl: String): Module = module {
-    single { createHttpClient(baseUrl) }
-    single { Lineage2ApiService(get(), baseUrl) }
+fun networkModule(settingsManager: SettingsManager): Module = module {
+    single { createHttpClient(settingsManager.baseUrl) }
+    single { Lineage2ApiService(get(), settingsManager.baseUrl) }
 }
 
 fun mapperModule(): Module = module {

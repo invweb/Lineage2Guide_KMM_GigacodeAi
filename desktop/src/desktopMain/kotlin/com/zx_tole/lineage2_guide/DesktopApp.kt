@@ -22,8 +22,6 @@ import com.zx_tole.lineage2_guide.ui.theme.Lineage2Theme
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-private const val DEFAULT_BASE_URL = "http://localhost:8080/api/v1"
-
 object DesktopKoinManager : KoinComponent {
     val itemsViewModel: ItemsViewModel
         get() = get()
@@ -48,7 +46,7 @@ object DesktopKoinManager : KoinComponent {
 
     fun init() {
         if (!KoinHelper.initialized) {
-            KoinHelper.initKoin(DEFAULT_BASE_URL)
+            KoinHelper.initKoin()
         }
     }
 }
@@ -73,7 +71,6 @@ fun DesktopAppContent() {
 
 fun main() {
     Logger.i("Starting Desktop application...")
-    Logger.i("Base URL: $DEFAULT_BASE_URL")
     
     DesktopKoinManager.init()
     Logger.i("Koin initialized: ${KoinHelper.initialized}")

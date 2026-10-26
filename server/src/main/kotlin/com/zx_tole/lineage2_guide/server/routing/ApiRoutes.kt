@@ -12,6 +12,8 @@ fun Routing.apiRoutes() {
         val rarity = call.request.queryParameters["rarity"]
         val type = call.request.queryParameters["type"]
         val search = call.request.queryParameters["search"]
+        val offset = call.request.queryParameters["offset"]?.toIntOrNull() ?: 0
+        val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
 
         var filtered = ServerMockData.items
 
@@ -30,7 +32,10 @@ fun Routing.apiRoutes() {
             filtered = filtered.filter { it.type.equals(t, ignoreCase = true) }
         }
 
-        val json = "{\"items\":[" + filtered.joinToString(",") { itemToJson(it) } + "]}"
+        val total = filtered.size
+        val paged = filtered.drop(offset).take(limit)
+        
+        val json = "{\"items\":[" + paged.joinToString(",") { itemToJson(it) } + "],\"total\":$total,\"offset\":$offset,\"limit\":$limit}"
         call.respondText(json, ContentType.Application.Json)
     }
 
@@ -47,6 +52,8 @@ fun Routing.apiRoutes() {
     get("/api/v1/quests") {
         val questType = call.request.queryParameters["type"]
         val search = call.request.queryParameters["search"]
+        val offset = call.request.queryParameters["offset"]?.toIntOrNull() ?: 0
+        val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
 
         var filtered = ServerMockData.quests
 
@@ -61,7 +68,10 @@ fun Routing.apiRoutes() {
             filtered = filtered.filter { it.type.equals(t, ignoreCase = true) }
         }
 
-        val json = "{\"quests\":[" + filtered.joinToString(",") { questToJson(it) } + "]}"
+        val total = filtered.size
+        val paged = filtered.drop(offset).take(limit)
+        
+        val json = "{\"quests\":[" + paged.joinToString(",") { questToJson(it) } + "],\"total\":$total,\"offset\":$offset,\"limit\":$limit}"
         call.respondText(json, ContentType.Application.Json)
     }
 
@@ -78,6 +88,8 @@ fun Routing.apiRoutes() {
     get("/api/v1/skills") {
         val classRestriction = call.request.queryParameters["classRestriction"]
         val skillType = call.request.queryParameters["type"]
+        val offset = call.request.queryParameters["offset"]?.toIntOrNull() ?: 0
+        val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
 
         var filtered = ServerMockData.skills
 
@@ -89,7 +101,10 @@ fun Routing.apiRoutes() {
             filtered = filtered.filter { it.type.equals(t, ignoreCase = true) }
         }
 
-        val json = "{\"skills\":[" + filtered.joinToString(",") { skillToJson(it) } + "]}"
+        val total = filtered.size
+        val paged = filtered.drop(offset).take(limit)
+        
+        val json = "{\"skills\":[" + paged.joinToString(",") { skillToJson(it) } + "],\"total\":$total,\"offset\":$offset,\"limit\":$limit}"
         call.respondText(json, ContentType.Application.Json)
     }
 
@@ -104,7 +119,13 @@ fun Routing.apiRoutes() {
     }
 
     get("/api/v1/classes") {
-        val json = "{\"classes\":[" + ServerMockData.classes.joinToString(",") { classToJson(it) } + "]}"
+        val offset = call.request.queryParameters["offset"]?.toIntOrNull() ?: 0
+        val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
+        
+        val total = ServerMockData.classes.size
+        val paged = ServerMockData.classes.drop(offset).take(limit)
+        
+        val json = "{\"classes\":[" + paged.joinToString(",") { classToJson(it) } + "],\"total\":$total,\"offset\":$offset,\"limit\":$limit}"
         call.respondText(json, ContentType.Application.Json)
     }
 
@@ -121,6 +142,8 @@ fun Routing.apiRoutes() {
     get("/api/v1/npcs") {
         val npcType = call.request.queryParameters["type"]
         val search = call.request.queryParameters["search"]
+        val offset = call.request.queryParameters["offset"]?.toIntOrNull() ?: 0
+        val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
 
         var filtered = ServerMockData.npcs
 
@@ -135,7 +158,10 @@ fun Routing.apiRoutes() {
             filtered = filtered.filter { it.type.equals(t, ignoreCase = true) }
         }
 
-        val json = "{\"npcs\":[" + filtered.joinToString(",") { npcToJson(it) } + "]}"
+        val total = filtered.size
+        val paged = filtered.drop(offset).take(limit)
+        
+        val json = "{\"npcs\":[" + paged.joinToString(",") { npcToJson(it) } + "],\"total\":$total,\"offset\":$offset,\"limit\":$limit}"
         call.respondText(json, ContentType.Application.Json)
     }
 
