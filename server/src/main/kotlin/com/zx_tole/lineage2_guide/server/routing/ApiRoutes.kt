@@ -5,6 +5,10 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.json.Json
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.InputStream
 
 fun Routing.apiRoutes() {
 
@@ -252,4 +256,52 @@ private fun npcToJson(npc: com.zx_tole.lineage2_guide.server.dto.NpcDto): String
     append("\"relatedQuestIds\":[${npc.relatedQuestIds.joinToString(",")}],")
     append("\"iconUrl\":${q(npc.iconUrl)}")
     append("}")
+}
+
+// Icon serving endpoint
+fun Routing.iconRoutes() {
+    // Load icon mapping at startup
+    val iconMapping = mutableMapOf<String, String>()
+    try {
+        val mappingStream = javaClass.classLoader?.getResourceAsStream("icon_mapping.json")
+        if (mappingStream != null) {
+            val mappingText = mappingStream.bufferedReader().use { it.readText() }
+            @Suppress("UNCHECKED_CAST")
+            val parsed = Json { ignoreUnknownKeys = true }.decodeFromString<Map<String, String>>(mappingText)
+            iconMapping.putAll(parsed)
+            println("Loaded icon mapping: ${iconMapping.size} entries")
+        } else {
+            println("Warning: icon_mapping.json not found in resources")
+        }
+    } catch (e: Exception) {
+        println("Warning: Could not load icon mapping: ${e.message}")
+        e.printStackTrace()
+    }
+    
+    get("/api/v1/icons/items/{id}") {
+        val itemId = call.parameters["id"]
+        val iconFile = itemId?.let { iconMapping[it] }
+        
+        println("Requesting icon for item $itemId, iconFile=$iconFile")
+        
+        if (iconFile != null) {
+            val resourcePath = "icons/items/$iconFile.png"
+            val inputStream = javaClass.classLoader?.getResourceAsStream(resourcePath)
+            
+            if (inputStream != null) {
+                println("Serving icon: $resourcePath (${inputStream.available()} bytes)")
+                call.respondBytes(
+                    inputStream.readBytes(),
+                    ContentType.Image.PNG
+                )
+                inputStream.close()
+            } else {
+                println("Icon not found: $resourcePath")
+                call.respondText("Icon not found: $iconFile", ContentType.Text.Plain, HttpStatusCode.NotFound)
+            }
+        } else {
+            println("No icon mapping for item $itemId")
+            call.respondText("Item $itemId has no icon", ContentType.Text.Plain, HttpStatusCode.NotFound)
+        }
+    }
 }

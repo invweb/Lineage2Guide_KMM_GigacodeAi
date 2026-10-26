@@ -109,13 +109,8 @@ object RealDataLoader {
         }
     }
     
-    private fun generateItemIconUrl(itemId: Long): String {
-        val iconFile = when {
-            itemId < 10000 -> "IL_item_${itemId.toString().padStart(4, '0')}.png"
-            itemId < 100000 -> "IL_item_${itemId.toString().padStart(5, '0')}.png"
-            else -> "IL_item_${itemId.toString().padStart(6, '0')}.png"
-        }
-        return "https://raw.githubusercontent.com/cuteshaun/lineage2-api/master/data/generated/interlude/icons/$iconFile"
+    private fun generateLocalIconUrl(entityType: String, entityId: Long): String {
+        return "http://localhost:8080/api/v1/icons/$entityType/$entityId"
     }
     
     private fun generateSkillIconUrl(skillId: Long, skillLevel: Int): String {
@@ -161,7 +156,7 @@ object RealDataLoader {
                     dropInfo = item.dropInfo,
                     stats = item.stats.map { MapEntry(it.key, it.value) },
                     description = sanitize(item.description),
-                    iconUrl = item.iconUrl ?: generateItemIconUrl(item.id)
+                    iconUrl = generateLocalIconUrl("items", item.id)
                 )
             }
         } catch (e: Exception) {
@@ -190,7 +185,7 @@ object RealDataLoader {
                     type = skill.type,
                     description = sanitize(skill.description),
                     cooldown = skill.cooldown,
-                    iconUrl = skill.iconUrl ?: generateSkillIconUrl(skill.id, skill.level),
+                    iconUrl = generateLocalIconUrl("skills", skill.id),
                     manaCost = skill.manaCost,
                     range = skill.range
                 )
@@ -220,7 +215,7 @@ object RealDataLoader {
                     location = npc.location ?: "Unknown",
                     description = sanitize(npc.description),
                     relatedQuestIds = npc.relatedQuestIds,
-                    iconUrl = npc.iconUrl ?: generateNpcIconUrl(npc.id)
+                    iconUrl = generateLocalIconUrl("npcs", npc.id)
                 )
             }
         } catch (e: Exception) {
@@ -277,7 +272,7 @@ object RealDataLoader {
                     race = cls.race,
                     subClasses = cls.subClasses,
                     description = sanitize(cls.description),
-                    iconUrl = cls.iconUrl ?: "https://raw.githubusercontent.com/cuteshaun/lineage2-api/master/data/generated/interlude/icons/IL_class_${cls.name.lowercase().replace(" ", "_")}.png",
+                    iconUrl = generateLocalIconUrl("classes", cls.id),
                     baseStats = cls.baseStats.map { MapEntry(it.key, it.value) }
                 )
             }

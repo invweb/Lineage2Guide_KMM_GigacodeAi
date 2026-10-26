@@ -11,15 +11,10 @@ object IconLoader {
     private const val ICONS_BASE_URL = "https://raw.githubusercontent.com/cuteshaun/lineage2-api/master/data/generated/interlude/icons"
     
     /**
-     * Generate icon URL for an item by its ID
+     * Generate icon URL for an item by its ID (local server)
      */
     fun getItemIconUrl(itemId: Long): String {
-        val iconFile = when {
-            itemId < 10000 -> "IL_item_${itemId.toString().padStart(4, '0')}.png"
-            itemId < 100000 -> "IL_item_${itemId.toString().padStart(5, '0')}.png"
-            else -> "IL_item_${itemId.toString().padStart(6, '0')}.png"
-        }
-        return "$ICONS_BASE_URL/$iconFile"
+        return "http://localhost:8080/api/v1/icons/items/$itemId"
     }
     
     /**

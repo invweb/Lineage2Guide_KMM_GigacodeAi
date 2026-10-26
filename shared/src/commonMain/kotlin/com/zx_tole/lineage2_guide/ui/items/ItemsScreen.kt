@@ -215,12 +215,27 @@ fun ItemCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Load icon with Coil
-            AsyncImage(
-                model = iconUrl,
-                contentDescription = item.name,
-                modifier = Modifier.size(48.dp)
-            )
+            // Display icon based on item type
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(rarityColor.copy(alpha = 0.2f), MaterialTheme.shapes.medium),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = when (item.type.name) {
+                        "WEAPON" -> Icons.Default.Star
+                        "ARMOR" -> Icons.Default.Shield
+                        "CONSUMABLE" -> Icons.Default.LocalPharmacy
+                        "SCROLL" -> Icons.Default.MenuBook
+                        "MATERIAL" -> Icons.Default.Inventory2
+                        else -> Icons.Default.Inventory2
+                    },
+                    contentDescription = null,
+                    tint = rarityColor,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.width(12.dp))
 

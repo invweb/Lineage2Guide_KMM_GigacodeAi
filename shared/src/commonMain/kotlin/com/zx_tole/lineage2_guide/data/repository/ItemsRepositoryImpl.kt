@@ -33,8 +33,8 @@ class ItemsRepositoryImpl(
             rarity = filter.rarity,
             location = filter.location,
             search = filter.searchQuery,
-            page = 0,
-            pageSize = 10000
+            offset = 0,
+            limit = 10000
         )
         return response.items.size
     }
