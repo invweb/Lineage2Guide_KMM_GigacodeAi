@@ -1,5 +1,6 @@
 package com.zx_tole.lineage2_guide.ui.items
 
+import com.zx_tole.lineage2_guide.data.settings.SettingsManager
 import com.zx_tole.lineage2_guide.domain.model.Item
 import com.zx_tole.lineage2_guide.domain.model.ItemType
 import com.zx_tole.lineage2_guide.domain.model.ItemsFilter
@@ -22,7 +23,14 @@ class ItemsViewModelTest {
             override suspend fun clearCache() {}
         }
         
-        val viewModel = ItemsViewModel(mockRepo)
+        val mockSettings = object : SettingsManager {
+            override val baseUrl: String = "http://localhost:8080"
+            override fun setBaseUrl(url: String) {}
+            override fun getPageSize(): Int = 50
+            override fun setPageSize(size: Int) {}
+        }
+        
+        val viewModel = ItemsViewModel(mockRepo, mockSettings)
         viewModel.onSearchQueryChanged("adamantite")
         val state = viewModel.uiState.value
         assertEquals("adamantite", state.searchQuery)
@@ -38,7 +46,14 @@ class ItemsViewModelTest {
             override suspend fun clearCache() {}
         }
         
-        val viewModel = ItemsViewModel(mockRepo)
+        val mockSettings = object : SettingsManager {
+            override val baseUrl: String = "http://localhost:8080"
+            override fun setBaseUrl(url: String) {}
+            override fun getPageSize(): Int = 50
+            override fun setPageSize(size: Int) {}
+        }
+        
+        val viewModel = ItemsViewModel(mockRepo, mockSettings)
         viewModel.onSearchQueryChanged("")
         val state = viewModel.uiState.value
         assertEquals("", state.searchQuery)
