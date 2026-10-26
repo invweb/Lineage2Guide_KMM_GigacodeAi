@@ -66,10 +66,13 @@ fun ItemsScreen(
         else -> {
             ItemsSuccessScreen(
                 items = filteredItems,
+                isLoadingMore = uiState.isLoadingMore,
+                hasMore = uiState.hasMore,
                 isRefreshing = uiState.isRefreshing,
                 searchQuery = searchQuery,
                 onSearchQueryChanged = { searchQuery = it },
                 onRefresh = viewModel::refresh,
+                onLoadMore = viewModel::loadMore,
                 onItemClicked = onNavigateToDetail,
                 onClassClick = onNavigateToClassDetail
             )
@@ -81,10 +84,13 @@ fun ItemsScreen(
 @Composable
 private fun ItemsSuccessScreen(
     items: List<Item>,
+    isLoadingMore: Boolean,
+    hasMore: Boolean,
     isRefreshing: Boolean,
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
     onRefresh: () -> Unit,
+    onLoadMore: () -> Unit,
     onItemClicked: (Long) -> Unit,
     onClassClick: (String) -> Unit
 ) {
@@ -137,6 +143,33 @@ private fun ItemsSuccessScreen(
                             message = if (searchQuery.isNotBlank()) "No items match your search" else "No items found",
                             icon = Icons.Default.Inventory2
                         )
+                    }
+                }
+
+                // Load More button
+                if (hasMore && items.isNotEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Button(
+                                onClick = onLoadMore,
+                                enabled = !isLoadingMore,
+                                modifier = Modifier.fillMaxWidth(0.6f)
+                            ) {
+                                if (isLoadingMore) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(20.dp),
+                                        strokeWidth = 2.dp
+                                    )
+                                } else {
+                                    Text("Load More")
+                                }
+                            }
+                        }
                     }
                 }
             }

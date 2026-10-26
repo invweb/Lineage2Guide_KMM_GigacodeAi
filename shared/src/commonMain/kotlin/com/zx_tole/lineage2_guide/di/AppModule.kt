@@ -64,7 +64,7 @@ fun useCaseModule(): Module = module {
 }
 
 fun viewModelModule(): Module = module {
-    factory { ItemsViewModel(get()) }
+    factory { ItemsViewModel(get(), get()) }
     factory { QuestsViewModel(get()) }
     factory { SkillsViewModel(get()) }
     factory { ClassesViewModel(get()) }

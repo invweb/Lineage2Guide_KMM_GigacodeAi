@@ -43,6 +43,7 @@ fun AppNavigation(
     classDetailViewModel: ClassDetailViewModel,
     npcDetailViewModel: NpcDetailViewModel
 ) {
+    // All ViewModels already have SettingsManager injected via Koin {
     var currentTab by remember { mutableIntStateOf(0) }
     var selectedScreenId by remember { mutableLongStateOf(0L) }
     var showDetail by remember { mutableStateOf(false) }

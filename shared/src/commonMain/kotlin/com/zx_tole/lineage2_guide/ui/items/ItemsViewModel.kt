@@ -1,6 +1,7 @@
 package com.zx_tole.lineage2_guide.ui.items
 
 import com.zx_tole.lineage2_guide.common.Logger
+import com.zx_tole.lineage2_guide.data.settings.SettingsManager
 import com.zx_tole.lineage2_guide.domain.model.Item
 import com.zx_tole.lineage2_guide.domain.model.ItemsFilter
 import com.zx_tole.lineage2_guide.domain.repository.ItemsRepository
@@ -11,6 +12,8 @@ import kotlinx.coroutines.launch
 data class ItemsUiState(
     val items: List<Item> = emptyList(),
     val isLoading: Boolean = false,
+    val isLoadingMore: Boolean = false,
+    val hasMore: Boolean = true,
     val error: String? = null,
     val searchQuery: String = "",
     val isRefreshing: Boolean = false
@@ -21,33 +24,29 @@ data class ItemsUiState(
 }
 
 class ItemsViewModel(
-    private val itemsRepository: ItemsRepository
+    private val itemsRepository: ItemsRepository,
+    private val settingsManager: SettingsManager
 ) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(ItemsUiState.Initial)
     val uiState: StateFlow<ItemsUiState> = _uiState.asStateFlow()
+
+    private var currentOffset = 0
+    private var pageSize = 50
 
     init {
         loadItems()
     }
 
     private fun loadItems() {
+        pageSize = settingsManager.getPageSize()
+        currentOffset = 0
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             try {
                 Logger.i("Loading items from API...")
-                // refreshItems loads data from API into repository's internal state
                 itemsRepository.refreshItems()
-                Logger.i("Items loaded, fetching...")
-                // getItems returns a Flow that emits the current items
-                // We collect once to get initial value, then stop
-                val items = itemsRepository.getItems(ItemsFilter()).firstOrNull() ?: emptyList()
-                Logger.i("Items count: ${items.size}")
-                _uiState.value = _uiState.value.copy(
-                    items = items,
-                    isLoading = false,
-                    error = null
-                )
+                loadItemsPage()
             } catch (e: Exception) {
                 logError("Error in items load", e)
                 _uiState.value = _uiState.value.copy(
@@ -58,18 +57,49 @@ class ItemsViewModel(
         }
     }
 
+    private suspend fun loadItemsPage() {
+        try {
+            val items = itemsRepository.getItems(ItemsFilter()).firstOrNull() ?: emptyList()
+            
+            // Simulate pagination by taking only first pageSize items
+            val pagedItems = if (items.size > currentOffset + pageSize) {
+                items.take(currentOffset + pageSize)
+            } else {
+                items
+            }
+            
+            _uiState.value = _uiState.value.copy(
+                items = pagedItems,
+                isLoading = false,
+                isLoadingMore = false,
+                hasMore = items.size > currentOffset + pageSize,
+                error = null
+            )
+        } catch (e: Exception) {
+            logError("Error loading items page", e)
+        }
+    }
+
+    fun loadMore() {
+        if (_uiState.value.isLoadingMore || !_uiState.value.hasMore) return
+        
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoadingMore = true)
+            currentOffset += pageSize
+            loadItemsPage()
+        }
+    }
+
     fun onSearchQueryChanged(query: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = query)
-        // Trigger search by reloading items (repository will filter if needed)
-        if (query.isNotBlank()) {
-            viewModelScope.launch {
-                try {
-                    // In a real app, this would pass search to API
-                    // For now, just update the UI state
-                    Logger.i("Search query changed: $query")
-                } catch (e: Exception) {
-                    logError("Error during search", e)
-                }
+        _uiState.value = _uiState.value.copy(searchQuery = query, items = emptyList())
+        currentOffset = 0
+        // Trigger reload
+        viewModelScope.launch {
+            try {
+                itemsRepository.refreshItems()
+                loadItemsPage()
+            } catch (e: Exception) {
+                logError("Error during search", e)
             }
         }
     }
@@ -77,14 +107,10 @@ class ItemsViewModel(
     fun refresh() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isRefreshing = true)
+            currentOffset = 0
             try {
                 itemsRepository.refreshItems()
-                val items = itemsRepository.getItems(ItemsFilter()).firstOrNull() ?: emptyList()
-                _uiState.value = _uiState.value.copy(
-                    items = items,
-                    isRefreshing = false,
-                    error = null
-                )
+                loadItemsPage()
             } catch (e: Exception) {
                 logError("Error during refresh", e)
                 _uiState.value = _uiState.value.copy(
