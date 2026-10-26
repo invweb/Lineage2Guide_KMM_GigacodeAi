@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.zx_tole.lineage2_guide.data.icons.IconLoader
 import com.zx_tole.lineage2_guide.domain.model.Skill
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
@@ -125,7 +124,7 @@ private fun SkillCard(
     onClick: () -> Unit
 ) {
     // Use iconUrl from model or generate one
-    val iconUrl = skill.iconUrl ?: IconLoader.getSkillIconUrl(skill.id)
+    val iconUrl = skill.iconUrl ?: "http://localhost:8080/api/v1/icons/skills/${skill.id}"
 
     Card(
         modifier = Modifier

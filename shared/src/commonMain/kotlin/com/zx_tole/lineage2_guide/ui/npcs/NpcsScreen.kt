@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.zx_tole.lineage2_guide.data.icons.IconLoader
 import com.zx_tole.lineage2_guide.domain.model.Npc
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
@@ -125,7 +124,7 @@ private fun NpcCard(
     onClick: () -> Unit
 ) {
     // Use iconUrl from model or generate one
-    val iconUrl = npc.iconUrl ?: IconLoader.getNpcIconUrl(npc.id)
+    val iconUrl = npc.iconUrl ?: "http://localhost:8080/api/v1/icons/npcs/${npc.id}"
 
     Card(
         modifier = Modifier
