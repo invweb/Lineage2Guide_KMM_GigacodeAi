@@ -1,19 +1,22 @@
 package com.zx_tole.lineage2_guide.ui.npcs
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material3.Icon
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.zx_tole.lineage2_guide.domain.model.Npc
+import com.zx_tole.lineage2_guide.domain.model.NpcType
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
 import com.zx_tole.lineage2_guide.ui.common.LoadingScreen
@@ -123,9 +126,6 @@ private fun NpcCard(
     npc: Npc,
     onClick: () -> Unit
 ) {
-    // Use iconUrl from model or generate one
-    val iconUrl = npc.iconUrl ?: "http://localhost:8080/api/v1/icons/npcs/${npc.id}"
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,12 +140,27 @@ private fun NpcCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Load NPC icon
-                AsyncImage(
-                    model = iconUrl,
-                    contentDescription = "${npc.name} icon",
-                    modifier = Modifier.size(40.dp)
-                )
+                // Display NPC icon based on type
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), MaterialTheme.shapes.medium),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = when (npc.type) {
+                            NpcType.QUEST_GIVER -> Icons.Default.Mail
+                            NpcType.MERCHANT -> Icons.Default.ShoppingCart
+                            NpcType.BOSS -> Icons.Default.Dangerous
+                            NpcType.MONSTER -> Icons.Default.Security
+                            NpcType.TEACHER -> Icons.Default.School
+                            NpcType.OTHER -> Icons.Default.Person
+                        },
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(12.dp))
 
