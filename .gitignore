@@ -9,3 +9,8 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
+.gigaide/
+
+# GigaCode AI configuration
+*.gigaide
+gigaide.properties
