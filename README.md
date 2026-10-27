@@ -11,14 +11,16 @@ A comprehensive companion guide app for Lineage 2 (Interlude chronicle) with off
 </p>
 
 <p align="center">
+  <img src="screenshots/desktop_quests.png" width="800" alt="Desktop Quests Screen"/><br/>
+  <em>Desktop — Quests with colored type icons (Main, Side, Daily, Guild, Event)</em>
+</p>
+
+<p align="center">
   <img src="screenshots/desktop_skills.png" width="800" alt="Desktop Skills Screen"/><br/>
   <em>Desktop — Skills with type-based icons</em>
 </p>
 
-<p align="center">
-  <img src="screenshots/desktop_quests.png" width="800" alt="Desktop Quests Screen"/><br/>
-  <em>Desktop — Quests with colored type icons (Main, Side, Daily, Guild, Event)</em>
-</p>
+
 
 <p align="center">
   <img src="screenshots/desktop_classes.png" width="800" alt="Desktop Classes Screen"/><br/>
