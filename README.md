@@ -11,8 +11,8 @@ A comprehensive companion guide app for Lineage 2 (Interlude chronicle) with off
 </p>
 
 <p align="center">
-  <img src="screenshots/desktop_classes.png" width="800" alt="Desktop Classes Screen"/><br/>
-  <em>Desktop — Classes with class-type icons</em>
+  <img src="screenshots/desktop_skills.png" width="800" alt="Desktop Skills Screen"/><br/>
+  <em>Desktop — Skills with type-based icons</em>
 </p>
 
 ### Mobile Application
