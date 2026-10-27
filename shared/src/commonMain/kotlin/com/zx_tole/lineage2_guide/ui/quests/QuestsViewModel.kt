@@ -29,23 +29,17 @@ class QuestsViewModel(
     private fun loadQuests() {
         viewModelScope.launch {
             try {
-                questsRepository.getQuests(null, null, null)
-                    .catch { e ->
-                        logError("Error loading quests", e)
-                        _uiState.update { it.copy(isLoading = false, error = e.message) }
-                    }
-                    .collect { quests ->
-                        _uiState.update {
-                            it.copy(
-                                allQuests = quests,
-                                quests = quests,
-                                isLoading = false,
-                                error = null
-                            )
-                        }
-                    }
+                questsRepository.refreshQuests()
+                _uiState.update {
+                    it.copy(
+                        allQuests = questsRepository.getQuests(null, null, null).firstOrNull() ?: emptyList(),
+                        quests = questsRepository.getQuests(null, null, null).firstOrNull() ?: emptyList(),
+                        isLoading = false,
+                        error = null
+                    )
+                }
             } catch (e: Exception) {
-                logError("Error in quests flow", e)
+                logError("Error loading quests", e)
                 _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
         }

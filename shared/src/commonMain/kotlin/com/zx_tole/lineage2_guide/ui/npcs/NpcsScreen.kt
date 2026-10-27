@@ -58,6 +58,21 @@ fun NpcsScreen(
     }
 }
 
+/**
+ * Get color for NPC type
+ */
+@Composable
+private fun npcTypeColor(type: NpcType): androidx.compose.ui.graphics.Color {
+    return when (type) {
+        NpcType.QUEST_GIVER -> androidx.compose.ui.graphics.Color(0xFF44BB44) // Green
+        NpcType.MERCHANT -> androidx.compose.ui.graphics.Color(0xFFFFDD44) // Yellow
+        NpcType.BOSS -> androidx.compose.ui.graphics.Color(0xFFFF4444) // Red
+        NpcType.MONSTER -> androidx.compose.ui.graphics.Color(0xFF888888) // Gray
+        NpcType.TEACHER -> androidx.compose.ui.graphics.Color(0xFF4488FF) // Blue
+        NpcType.OTHER -> androidx.compose.ui.graphics.Color(0xFF888888) // Gray
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NpcsSuccessScreen(
@@ -140,11 +155,11 @@ private fun NpcCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Display NPC icon based on type
+                // Display NPC icon based on type with colors
                 Box(
                     modifier = Modifier
                         .size(40.dp)
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), MaterialTheme.shapes.medium),
+                        .background(npcTypeColor(npc.type).copy(alpha = 0.2f), MaterialTheme.shapes.medium),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -157,7 +172,7 @@ private fun NpcCard(
                             NpcType.OTHER -> Icons.Default.Person
                         },
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = npcTypeColor(npc.type),
                         modifier = Modifier.size(24.dp)
                     )
                 }

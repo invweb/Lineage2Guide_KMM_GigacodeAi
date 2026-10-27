@@ -1,5 +1,6 @@
 package com.zx_tole.lineage2_guide.ui.classes
 
+import com.zx_tole.lineage2_guide.common.Logger
 import com.zx_tole.lineage2_guide.domain.model.GameClass
 import com.zx_tole.lineage2_guide.domain.repository.ClassesRepository
 import com.zx_tole.lineage2_guide.ui.common.BaseViewModel
@@ -51,8 +52,11 @@ class ClassesViewModel(
 
     private fun loadClasses() {
         viewModelScope.launch {
-            classesRepository.getClasses(null, null).collect { classes ->
-                _allClasses.value = classes
+            try {
+                classesRepository.refreshClasses()
+                _allClasses.value = classesRepository.getClasses(null, null).firstOrNull() ?: emptyList()
+            } catch (e: Exception) {
+                logError("Error loading classes", e)
             }
         }
     }

@@ -29,23 +29,18 @@ class SkillsViewModel(
     private fun loadSkills() {
         viewModelScope.launch {
             try {
-                skillsRepository.getSkills(null, null, null, null)
-                    .catch { e ->
-                        logError("Error loading skills", e)
-                        _uiState.update { it.copy(isLoading = false, error = e.message) }
-                    }
-                    .collect { skills ->
-                        _uiState.update {
-                            it.copy(
-                                allSkills = skills,
-                                skills = skills,
-                                isLoading = false,
-                                error = null
-                            )
-                        }
-                    }
+                skillsRepository.refreshSkills()
+                val skills = skillsRepository.getSkills(null, null, null, null).firstOrNull() ?: emptyList()
+                _uiState.update {
+                    it.copy(
+                        allSkills = skills,
+                        skills = skills,
+                        isLoading = false,
+                        error = null
+                    )
+                }
             } catch (e: Exception) {
-                logError("Error in skills flow", e)
+                logError("Error loading skills", e)
                 _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
         }

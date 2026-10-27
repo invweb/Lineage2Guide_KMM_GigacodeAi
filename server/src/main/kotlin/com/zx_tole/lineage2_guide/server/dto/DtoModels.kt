@@ -25,7 +25,10 @@ data class MapEntry(
 
 @Serializable
 data class ItemsResponse(
-    val items: List<ItemDto>
+    val items: List<ItemDto>,
+    val total: Int? = null,
+    val offset: Int = 0,
+    val limit: Int = 50
 )
 
 @Serializable
@@ -49,7 +52,10 @@ data class RewardDto(
 
 @Serializable
 data class QuestsResponse(
-    val quests: List<QuestDto>
+    val quests: List<QuestDto>,
+    val total: Int? = null,
+    val offset: Int = 0,
+    val limit: Int = 50
 )
 
 @Serializable
@@ -68,7 +74,10 @@ data class SkillDto(
 
 @Serializable
 data class SkillsResponse(
-    val skills: List<SkillDto>
+    val skills: List<SkillDto>,
+    val total: Int? = null,
+    val offset: Int = 0,
+    val limit: Int = 50
 )
 
 @Serializable
@@ -84,7 +93,10 @@ data class ClassDto(
 
 @Serializable
 data class ClassesResponse(
-    val classes: List<ClassDto>
+    val classes: List<ClassDto>,
+    val total: Int? = null,
+    val offset: Int = 0,
+    val limit: Int = 50
 )
 
 @Serializable
@@ -100,5 +112,8 @@ data class NpcDto(
 
 @Serializable
 data class NpcsResponse(
-    val npcs: List<NpcDto>
+    val npcs: List<NpcDto>,
+    val total: Int? = null,
+    val offset: Int = 0,
+    val limit: Int = 50
 )

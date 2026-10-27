@@ -4,7 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClassesResponse(
-    val classes: List<ClassDto>
+    val classes: List<ClassDto>,
+    val total: Int? = null,
+    val offset: Int = 0,
+    val limit: Int = 50
 )
 
 @Serializable

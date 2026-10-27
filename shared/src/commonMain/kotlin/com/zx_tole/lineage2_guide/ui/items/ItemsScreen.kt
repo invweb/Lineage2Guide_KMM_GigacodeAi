@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.zx_tole.lineage2_guide.domain.model.*
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
@@ -184,6 +183,7 @@ fun ItemCard(
     onClassClick: () -> Unit
 ) {
     val rarityColor = getRarityColor(item.rarity)
+    val (icon, iconTint) = getItemIcon(item.type)
 
     Card(
         modifier = Modifier
@@ -209,18 +209,18 @@ fun ItemCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Display icon from server or fallback
+            // Display icon based on item type
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(rarityColor.copy(alpha = 0.2f), MaterialTheme.shapes.medium),
+                    .background(iconTint.copy(alpha = 0.2f), MaterialTheme.shapes.medium),
                 contentAlignment = Alignment.Center
             ) {
-                val iconUrl = item.iconUrl ?: "http://localhost:8080/api/v1/icons/items/${item.id}"
-                AsyncImage(
-                    model = iconUrl,
+                Icon(
+                    imageVector = icon,
                     contentDescription = item.name,
-                    modifier = Modifier.size(48.dp)
+                    tint = iconTint,
+                    modifier = Modifier.size(32.dp)
                 )
             }
 
@@ -270,5 +270,70 @@ fun ItemCard(
 
             RarityBadge(rarity = item.rarity)
         }
+    }
+}
+
+/**
+ * Get icon and color for item based on type
+ */
+@Composable
+private fun getItemIcon(itemType: com.zx_tole.lineage2_guide.domain.model.ItemType): Pair<androidx.compose.ui.graphics.vector.ImageVector, androidx.compose.ui.graphics.Color> {
+    val lowerType = itemType.name.lowercase()
+    
+    return when {
+        // Weapons
+        lowerType.contains("weapon") || lowerType.contains("sword") || lowerType.contains("blade") || 
+        lowerType.contains("axe") || lowerType.contains("spear") || lowerType.contains("bow") ||
+        lowerType.contains("gun") || lowerType.contains("fist") || lowerType.contains("edge") ->
+            Pair(Icons.Default.Star, androidx.compose.ui.graphics.Color(0xFFFF4444))
+        
+        // Armor
+        lowerType.contains("armor") || lowerType.contains("chest") || lowerType.contains("head") || 
+        lowerType.contains("legs") || lowerType.contains("gloves") || lowerType.contains("boots") ||
+        lowerType.contains("shield") || lowerType.contains("helmet") || lowerType.contains("leather") ||
+        lowerType.contains("plate") || lowerType.contains("fabric") ->
+            Pair(Icons.Default.Security, androidx.compose.ui.graphics.Color(0xFF4488FF))
+        
+        // Accessories
+        lowerType.contains("accessory") || lowerType.contains("earrings") || lowerType.contains("necklace") ||
+        lowerType.contains("ring") || lowerType.contains("bracelet") || lowerType.contains("amulet") ||
+        lowerType.contains("weapon_crystal") || lowerType.contains("armor_crystal") ||
+        lowerType.contains("socket_item") || lowerType.contains("crystal") ->
+            Pair(Icons.Default.SettingsBrightness, androidx.compose.ui.graphics.Color(0xFFFFDD44))
+        
+        // Scrolls
+        lowerType.contains("scroll") || lowerType.contains("skill_scroll") || lowerType.contains("recipe") ||
+        lowerType.contains("design") || lowerType.contains("blueprint") ->
+            Pair(Icons.Default.Description, androidx.compose.ui.graphics.Color(0xFF44DD44))
+        
+        // Potions/Items
+        lowerType.contains("potion") || lowerType.contains("pot") || lowerType.contains("pharm") ||
+        lowerType.contains("seed") || lowerType.contains("herb") || lowerType.contains("stone") ||
+        lowerType.contains("ore") || lowerType.contains("hide") || lowerType.contains("leather") ||
+        lowerType.contains("skin") || lowerType.contains("meat") || lowerType.contains("fish") ->
+            Pair(Icons.Default.LocalPharmacy, androidx.compose.ui.graphics.Color(0xFF44BB88))
+        
+        // Arrows
+        lowerType.contains("arrow") || lowerType.contains("bolt") ->
+            Pair(Icons.Default.ArrowRight, androidx.compose.ui.graphics.Color(0xFF88BB44))
+        
+        // Foods
+        lowerType.contains("food") || lowerType.contains("meal") || lowerType.contains("cookie") ||
+        lowerType.contains("steak") || lowerType.contains("soup") || lowerType.contains("wine") ||
+        lowerType.contains("drink") ->
+            Pair(Icons.Default.Restaurant, androidx.compose.ui.graphics.Color(0xFFFF8844))
+        
+        // Quest items
+        lowerType.contains("quest") || lowerType.contains("key") || lowerType.contains("letter") ||
+        lowerType.contains("token") || lowerType.contains("piece") || lowerType.contains("part") ->
+            Pair(Icons.Default.Lock, androidx.compose.ui.graphics.Color(0xFF888888))
+        
+        // Pets/summons
+        lowerType.contains("pet") || lowerType.contains("summon") || lowerType.contains("egg") ->
+            Pair(Icons.Default.Pets, androidx.compose.ui.graphics.Color(0xFFCC44FF))
+        
+        // Materials/other
+        else ->
+            Pair(Icons.Default.Inventory2, androidx.compose.ui.graphics.Color(0xFF888888))
     }
 }

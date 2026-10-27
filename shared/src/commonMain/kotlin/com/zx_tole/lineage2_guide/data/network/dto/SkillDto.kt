@@ -4,7 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SkillsResponse(
-    val skills: List<SkillDto>
+    val skills: List<SkillDto>,
+    val total: Int? = null,
+    val offset: Int = 0,
+    val limit: Int = 50
 )
 
 @Serializable

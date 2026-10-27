@@ -59,20 +59,15 @@ class ItemsViewModel(
 
     private suspend fun loadItemsPage() {
         try {
-            val items = itemsRepository.getItems(ItemsFilter()).firstOrNull() ?: emptyList()
-            
-            // Simulate pagination by taking only first pageSize items
-            val pagedItems = if (items.size > currentOffset + pageSize) {
-                items.take(currentOffset + pageSize)
-            } else {
-                items
-            }
+            val allItems = itemsRepository.getItems(ItemsFilter()).firstOrNull() ?: emptyList()
+            val end_index = minOf(currentOffset + pageSize, allItems.size)
+            val newItems = allItems.subList(0, end_index)
             
             _uiState.value = _uiState.value.copy(
-                items = pagedItems,
+                items = newItems,
                 isLoading = false,
                 isLoadingMore = false,
-                hasMore = items.size > currentOffset + pageSize,
+                hasMore = end_index < allItems.size,
                 error = null
             )
         } catch (e: Exception) {
@@ -85,8 +80,26 @@ class ItemsViewModel(
         
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoadingMore = true)
-            currentOffset += pageSize
-            loadItemsPage()
+            val oldItems = _uiState.value.items
+            val newOffset = currentOffset + pageSize
+            
+            try {
+                val allItems = itemsRepository.getItems(ItemsFilter()).firstOrNull() ?: emptyList()
+                val end_index = minOf(newOffset + pageSize, allItems.size)
+                val newItemsSlice = allItems.subList(currentOffset, end_index)
+                
+                _uiState.value = _uiState.value.copy(
+                    items = oldItems + newItemsSlice,
+                    isLoadingMore = false,
+                    isLoading = false,
+                    hasMore = end_index < allItems.size,
+                    error = null
+                )
+                currentOffset = newOffset
+            } catch (e: Exception) {
+                logError("Error loading more items", e)
+                _uiState.value = _uiState.value.copy(isLoadingMore = false)
+            }
         }
     }
 

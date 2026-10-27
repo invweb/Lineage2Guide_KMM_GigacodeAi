@@ -29,23 +29,18 @@ class NpcsViewModel(
     private fun loadNpcs() {
         viewModelScope.launch {
             try {
-                npcsRepository.getNpcs(null, null, null)
-                    .catch { e ->
-                        logError("Error loading npcs", e)
-                        _uiState.update { it.copy(isLoading = false, error = e.message) }
-                    }
-                    .collect { npcs ->
-                        _uiState.update {
-                            it.copy(
-                                allNpcs = npcs,
-                                npcs = npcs,
-                                isLoading = false,
-                                error = null
-                            )
-                        }
-                    }
+                npcsRepository.refreshNpcs()
+                val npcs = npcsRepository.getNpcs(null, null, null).firstOrNull() ?: emptyList()
+                _uiState.update {
+                    it.copy(
+                        allNpcs = npcs,
+                        npcs = npcs,
+                        isLoading = false,
+                        error = null
+                    )
+                }
             } catch (e: Exception) {
-                logError("Error in npcs flow", e)
+                logError("Error loading npcs", e)
                 _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
         }

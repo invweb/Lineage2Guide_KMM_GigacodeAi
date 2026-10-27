@@ -1,5 +1,6 @@
 package com.zx_tole.lineage2_guide.ui.classes
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -122,6 +123,46 @@ private fun ClassCard(
     classData: GameClass,
     onClick: () -> Unit
 ) {
+    val lowerName = classData.name.lowercase()
+    val tint = when {
+        lowerName.contains("warrior") || lowerName.contains("knight") || lowerName.contains("adventurer") ->
+            androidx.compose.ui.graphics.Color(0xFFEF4444)
+        lowerName.contains("dark avenger") || lowerName.contains("sword master") ->
+            androidx.compose.ui.graphics.Color(0xFFFF6600)
+        lowerName.contains("warlord") || lowerName.contains("titans force") ->
+            androidx.compose.ui.graphics.Color(0xFFCC0000)
+        lowerName.contains("archer") || lowerName.contains("sylvain") || lowerName.contains("aetherpiers") ->
+            androidx.compose.ui.graphics.Color(0xFF44BB44)
+        lowerName.contains("mage") || lowerName.contains("wizard") || lowerName.contains("professor") || lowerName.contains("shillien templar") || lowerName.contains("ghost hunter") ->
+            androidx.compose.ui.graphics.Color(0xFF4488FF)
+        lowerName.contains("saint knight") || lowerName.contains("monk") || lowerName.contains("overlord") ->
+            androidx.compose.ui.graphics.Color(0xFFFFDD44)
+        lowerName.contains("oracle") || lowerName.contains("saint") ->
+            androidx.compose.ui.graphics.Color(0xFFFFEE88)
+        lowerName.contains("treasurer") || lowerName.contains("scout") || lowerName.contains("dusker") || lowerName.contains("phantom ranger") ->
+            androidx.compose.ui.graphics.Color(0xFF88BB44)
+        lowerName.contains("tyrant") || lowerName.contains("apostle") || lowerName.contains("saga") ->
+            androidx.compose.ui.graphics.Color(0xFFAA00AA)
+        lowerName.contains("warder") ->
+            androidx.compose.ui.graphics.Color(0xFF6688CC)
+        else ->
+            androidx.compose.ui.graphics.Color(0xFF888888)
+    }
+    
+    val icon = when {
+        lowerName.contains("warrior") || lowerName.contains("knight") || lowerName.contains("adventurer") -> Icons.Default.Star
+        lowerName.contains("dark avenger") || lowerName.contains("sword master") -> Icons.Default.Star
+        lowerName.contains("warlord") || lowerName.contains("titans force") -> Icons.Default.Star
+        lowerName.contains("archer") || lowerName.contains("sylvain") || lowerName.contains("aetherpiers") -> Icons.Default.SignalCellularAlt
+        lowerName.contains("mage") || lowerName.contains("wizard") || lowerName.contains("professor") || lowerName.contains("shillien templar") || lowerName.contains("ghost hunter") -> Icons.Filled.SettingsBrightness
+        lowerName.contains("saint knight") || lowerName.contains("monk") || lowerName.contains("overlord") -> Icons.Default.Favorite
+        lowerName.contains("oracle") || lowerName.contains("saint") -> Icons.Default.Favorite
+        lowerName.contains("treasurer") || lowerName.contains("scout") || lowerName.contains("dusker") || lowerName.contains("phantom ranger") -> Icons.Default.Visibility
+        lowerName.contains("tyrant") || lowerName.contains("apostle") || lowerName.contains("saga") -> Icons.Default.AutoAwesome
+        lowerName.contains("warder") -> Icons.Default.Shield
+        else -> Icons.Default.Person
+    }
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -131,33 +172,54 @@ private fun ClassCard(
         ),
         shape = MaterialTheme.shapes.medium
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = classData.name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Race: ${classData.race}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            if (classData.subClasses.isNotEmpty()) {
-                Text(
-                    text = "Sub-classes: ${classData.subClasses.joinToString(", ")}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(tint.copy(alpha = 0.2f), MaterialTheme.shapes.medium),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = classData.name,
+                    tint = tint,
+                    modifier = Modifier.size(32.dp)
                 )
             }
-            classData.description?.let { desc ->
-                Spacer(modifier = Modifier.height(8.dp))
+            
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = desc,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = classData.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Race: ${classData.race}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                if (classData.subClasses.isNotEmpty()) {
+                    Text(
+                        text = "Sub-classes: ${classData.subClasses.joinToString(", ")}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                classData.description?.let { desc ->
+                    Text(
+                        text = desc,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }

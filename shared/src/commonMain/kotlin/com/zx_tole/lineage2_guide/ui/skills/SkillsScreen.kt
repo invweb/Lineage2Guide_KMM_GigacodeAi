@@ -1,5 +1,6 @@
 package com.zx_tole.lineage2_guide.ui.skills
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.zx_tole.lineage2_guide.domain.model.Skill
+import com.zx_tole.lineage2_guide.domain.model.SkillType
 import com.zx_tole.lineage2_guide.ui.common.EmptyScreen
 import com.zx_tole.lineage2_guide.ui.common.ErrorScreen
 import com.zx_tole.lineage2_guide.ui.common.LoadingScreen
@@ -52,6 +53,17 @@ fun SkillsScreen(
                 onSearchQueryChanged = viewModel::onSearchQueryChanged
             )
         }
+    }
+}
+
+/**
+ * Get color for skill type
+ */
+@Composable
+private fun skillTypeColor(type: SkillType): androidx.compose.ui.graphics.Color {
+    return when (type) {
+        SkillType.ACTIVE -> androidx.compose.ui.graphics.Color(0xFFFF4444) // Red for active
+        SkillType.PASSIVE -> androidx.compose.ui.graphics.Color(0xFF4488FF) // Blue for passive
     }
 }
 
@@ -123,9 +135,6 @@ private fun SkillCard(
     skill: Skill,
     onClick: () -> Unit
 ) {
-    // Use iconUrl from model or generate one
-    val iconUrl = skill.iconUrl ?: "http://localhost:8080/api/v1/icons/skills/${skill.id}"
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,12 +149,23 @@ private fun SkillCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Load skill icon
-                AsyncImage(
-                    model = iconUrl,
-                    contentDescription = "${skill.name} icon",
-                    modifier = Modifier.size(40.dp)
-                )
+                // Display skill icon based on type with colors
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(skillTypeColor(skill.type).copy(alpha = 0.2f), MaterialTheme.shapes.medium),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = when (skill.type) {
+                            SkillType.ACTIVE -> Icons.Default.Bolt
+                            SkillType.PASSIVE -> Icons.Default.Palette
+                        },
+                        contentDescription = null,
+                        tint = skillTypeColor(skill.type),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(12.dp))
 
