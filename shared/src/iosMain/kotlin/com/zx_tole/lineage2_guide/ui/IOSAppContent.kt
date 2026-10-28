@@ -53,7 +53,7 @@ object IOSKoinManager : KoinComponent {
 fun IOSAppContentBridge(): UIViewController {
     IOSKoinManager.init()
 
-    return androidx.compose.ui.window.ComposeUIViewController(configure = { }) {
+    return androidx.compose.ui.window.ComposeUIViewController(configure = { enforceStrictPlistSanityCheck = false }) {
         IOSAppContent()
     }
 }

@@ -58,6 +58,22 @@ A comprehensive companion guide app for Lineage 2 (Interlude chronicle) with off
   <em>Web — Classes overview with race and sub-class info</em>
 </p>
 
+### iOS Application
+<p align="center">
+  <img src="screenshots/ios_items.png" width="280" alt="iOS Items Screen"/>
+  <img src="screenshots/ios_quests.png" width="280" alt="iOS Quests Screen"/>
+  <img src="screenshots/ios_skills.png" width="280" alt="iOS Skills Screen"/>
+</p>
+
+<p align="center">
+  <img src="screenshots/ios_classes.png" width="280" alt="iOS Classes Screen"/>
+  <img src="screenshots/ios_npcs.png" width="280" alt="iOS NPCs Screen"/>
+</p>
+
+<p align="center">
+  <em>iOS — Compose Multiplatform UI with Material 3 design</em>
+</p>
+
 ### Mobile Application
 <p align="center">
   <img src="screenshots/splash0.jpg" width="200" alt="Splash Screen"/>
@@ -97,7 +113,7 @@ A comprehensive companion guide app for Lineage 2 (Interlude chronicle) with off
 - **🔄 Real-time sync** — Automatic data synchronization
 - **💾 Offline caching** — Disk-based caching for 24 hours
 - **🌐 API-first architecture** — Clean separation between client and server
-- **📱 Cross-platform** — Android + Desktop (macOS, Windows, Linux)
+- **📱 Cross-platform** — Android, iOS + Desktop (macOS, Windows, Linux)
 - **🛠 MVVM Architecture** — Clean, maintainable code structure
 
 ## 🛠 Tech Stack
@@ -128,7 +144,28 @@ Game data sourced from [lineage2-api](https://github.com/cuteshaun/lineage2-api)
 | Classes | 89 | 63 KB |
 | **Total** | **31,404** | **975 KB** (from 24 MB source) |
 
-## 🚀 Getting Started
+#### iOS
+1. Clone the repository:
+```bash
+git clone https://github.com/invweb/Lineage2Guide.git
+cd Lineage2Guide
+```
+
+2. Build the shared framework:
+```bash
+./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
+```
+
+3. Open the Xcode project:
+```bash
+open iosApp/iosApp.xcodeproj
+```
+
+4. Select **iPhone 17 Pro** (or your preferred simulator) and press **Run** (⌘R)
+
+The iOS app uses Compose Multiplatform with the same MVVM architecture and Koin DI as the Android version.
+
+#### Desktop
 
 ### Prerequisites
 - Android Studio (latest)
@@ -227,8 +264,9 @@ Server starts on `http://localhost:8080` (Android emulator: `http://10.0.2.2:808
 ├── shared/                 # Shared Kotlin Multiplatform module
 │   ├── commonMain/         # Shared code (ViewModels, UI, Data)
 │   ├── androidMain/        # Android-specific code
-│   ├── desktopMain/        # Desktop-specific code
-│   └── iosMain/            # iOS-specific code (WIP)
+│   ├── iosMain/            # iOS-specific code (ComposeUIViewController bridge)
+│   └── desktopMain/        # Desktop-specific code
+├── iosApp/                 # iOS Xcode project + Swift UI
 └── server/                 # Ktor backend module
     ├── data/               # RealDataLoader, ServerMockData
     ├── dto/                # API data transfer objects
@@ -262,6 +300,11 @@ Server starts on `http://localhost:8080` (Android emulator: `http://10.0.2.2:808
 - **📱 Responsive** — Works on desktop and mobile browsers
 - **⚡ Lightweight** — Pure HTML/CSS/JS, no framework overhead
 - **📊 Stats Dashboard** — Quick overview of available data
+
+### v1.4.1
+- **🍎 iOS Application** — New iOS app with Compose Multiplatform
+- **🔄 Koin DI** — Full Koin dependency injection on iOS
+- **📱 Same MVVM** — Shared ViewModels and UI logic with Android
 
 ### v1.3.0
 - **📱 Cross-platform** — Now available on Android, Desktop, and Web

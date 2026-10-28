@@ -6,15 +6,18 @@ class ComposeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.systemBackground
         
-        let composeView = IOSAppContentBridge()
-        composeView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(composeView)
+        let composeVC = IOSAppContentKt.IOSAppContentBridge()
+        composeVC.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(composeVC.view)
+        addChild(composeVC)
         
         NSLayoutConstraint.activate([
-            composeView.topAnchor.constraint(equalTo: view.topAnchor),
-            composeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            composeView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            composeView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            composeVC.view.topAnchor.constraint(equalTo: view.topAnchor),
+            composeVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            composeVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            composeVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        composeVC.didMove(toParent: self)
     }
 }
