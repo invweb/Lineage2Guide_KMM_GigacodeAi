@@ -11,8 +11,7 @@ import com.zx_tole.lineage2_guide.server.routing.iconRoutes
 
 fun Application.module() {
     install(CORS) {
-        allowHost("localhost")
-        allowHost("127.0.0.1")
+        allowHost("*")
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
         allowMethod(HttpMethod.Get)

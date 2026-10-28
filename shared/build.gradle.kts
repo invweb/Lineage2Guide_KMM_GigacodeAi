@@ -39,6 +39,7 @@ kotlin {
                 implementation("org.jetbrains.compose.foundation:foundation:1.7.0")
                 implementation("org.jetbrains.compose.material3:material3:1.7.0")
                 implementation("org.jetbrains.compose.material:material-icons-extended:1.7.0")
+                implementation("org.jetbrains.compose.ui:ui:1.7.0")
                 
                 // Coroutines
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
