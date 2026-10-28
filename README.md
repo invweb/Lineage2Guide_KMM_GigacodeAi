@@ -32,6 +32,32 @@ A comprehensive companion guide app for Lineage 2 (Interlude chronicle) with off
   <em>Desktop — NPCs with type-based icons (Quest Giver, Merchant, Boss, Monster)</em>
 </p>
 
+### Web Application
+<p align="center">
+  <img src="screenshots/web_items.png" width="800" alt="Web Items Screen"/><br/>
+  <em>Web — Items with Material Icons and type-based color coding</em>
+</p>
+
+<p align="center">
+  <img src="screenshots/web_skills.png" width="800" alt="Web Skills Screen"/><br/>
+  <em>Web — Skills with Active/Passive type icons</em>
+</p>
+
+<p align="center">
+  <img src="screenshots/web_npcs.png" width="800" alt="Web NPCs Screen"/><br/>
+  <em>Web — NPCs with type-based icons (Quest Giver, Merchant, Boss, Monster)</em>
+</p>
+
+<p align="center">
+  <img src="screenshots/web_quests.png" width="800" alt="Web Quests Screen"/><br/>
+  <em>Web — Quests with type icons (Main, Side, Daily, Guild, Event)</em>
+</p>
+
+<p align="center">
+  <img src="screenshots/web_classes.png" width="800" alt="Web Classes Screen"/><br/>
+  <em>Web — Classes overview with race and sub-class info</em>
+</p>
+
 ### Mobile Application
 <p align="center">
   <img src="screenshots/splash0.jpg" width="200" alt="Splash Screen"/>
@@ -78,15 +104,15 @@ A comprehensive companion guide app for Lineage 2 (Interlude chronicle) with off
 
 | Layer | Technology |
 |-------|-----------|
-| **Language** | Kotlin |
-| **UI** | Jetpack Compose + Material 3 |
+| **Language** | Kotlin, TypeScript |
+| **UI** | Jetpack Compose + Material 3 (Android/Desktop), Vanilla HTML/CSS/JS + Material Icons (Web) |
 | **Architecture** | MVVM |
 | **DI** | Koin 4.0.0 |
 | **Local DB** | Room 2.7.2 (Android), File Cache (Desktop) |
-| **API** | Retrofit 2.12.0 (Android), Ktor Client 3.2.3 (Desktop) |
+| **API** | Retrofit 2.12.0 (Android), Ktor Client 3.2.3 (Desktop), Fetch API (Web) |
 | **Server** | Ktor 3.2.3 (Netty) |
 | **Images** | Coil 3.1.0 (image loading) |
-| **Build** | AGP 9.4.1, Gradle 9.6.0, Kotlin Multiplatform |
+| **Build** | AGP 9.4.1, Gradle 9.6.0, Kotlin Multiplatform, Vite |
 | **SDK** | Android: compileSdk 37, minSdk 24 |
 
 ## 📊 Data
@@ -108,6 +134,7 @@ Game data sourced from [lineage2-api](https://github.com/cuteshaun/lineage2-api)
 - Android Studio (latest)
 - JDK 17+
 - Android SDK (API 37)
+- Node.js 18+ (for web version)
 
 ### Run the App
 
@@ -140,6 +167,35 @@ Server starts on `http://localhost:8080`
 ./gradlew :desktop:runDesktop
 ```
 
+#### Web
+1. Clone the repository:
+```bash
+git clone https://github.com/invweb/Lineage2Guide.git
+cd Lineage2Guide
+```
+
+2. Run the backend server:
+```bash
+./gradlew :server:run
+```
+Server starts on `http://localhost:8080`
+
+3. Start the web server:
+```bash
+./gradlew :web:run
+```
+
+4. Open browser:
+Navigate to `http://localhost:8082`
+
+The web app features a modern Material Design interface with:
+- **Smart Icons** — Context-aware Material Icons for all entities (weapons, armor, skills, NPCs, etc.)
+- **Type-based Color Coding** — Visual distinction by type (weapons = red, armor = blue, accessories = gold, etc.)
+- **Search & Filter** — Real-time search by name, type, or description
+- **Responsive Design** — Works on desktop and mobile browsers
+- **Pagination** — Optimized loading with 100 items per page
+- **Stats Dashboard** — Quick overview of available data count
+
 ### Run the Mock Server (Development)
 The app uses a Ktor server for game data. For development:
 
@@ -164,6 +220,10 @@ Server starts on `http://localhost:8080` (Android emulator: `http://10.0.2.2:808
 │       ├── classes/        # Classes list & detail
 │       └── common/         # Shared components & states
 ├── desktop/                # Desktop application module (Compose Desktop)
+├── web/                    # Web application (plain HTML/CSS/JS)
+│   ├── src/                # React components
+│   ├── package.json        # Node dependencies
+│   └── vite.config.ts      # Vite configuration
 ├── shared/                 # Shared Kotlin Multiplatform module
 │   ├── commonMain/         # Shared code (ViewModels, UI, Data)
 │   ├── androidMain/        # Android-specific code
@@ -195,7 +255,19 @@ Server starts on `http://localhost:8080` (Android emulator: `http://10.0.2.2:808
 
 ## 🔄 Recent Updates
 
-### v1.2.0 (Latest)
+### v1.4.0 (Latest)
+- **🌐 Web Application** — New lightweight web app with Material Icons
+- **🎨 Smart Icons** — Context-aware Material Icons for all entities with type-based color coding
+- **🔍 Enhanced Search** — Real-time search across all categories
+- **📱 Responsive** — Works on desktop and mobile browsers
+- **⚡ Lightweight** — Pure HTML/CSS/JS, no framework overhead
+- **📊 Stats Dashboard** — Quick overview of available data
+
+### v1.3.0
+- **📱 Cross-platform** — Now available on Android, Desktop, and Web
+- **🛠 Desktop Application** — New Compose Desktop app with all 5 categories
+
+### v1.2.0
 - **✨ Desktop Application** — New Compose Desktop app with all 5 categories
 - **🎨 Smart Icons** — Context-aware icons for all entities based on type
 - **📊 Pagination** — Optimized data loading with pagination (max 1000 items per category)
