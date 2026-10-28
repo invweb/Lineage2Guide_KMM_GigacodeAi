@@ -14,3 +14,7 @@ local.properties
 # GigaCode AI configuration
 *.gigaide
 gigaide.properties
+
+# Xcode user state
+*.xcuserstate
+*.xcuserdata
