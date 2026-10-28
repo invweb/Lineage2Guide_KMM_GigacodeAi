@@ -157,7 +157,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"${PROJECT_DIR}/..\"\n./gradlew :shared:linkDebugFrameworkIosSimulatorArm64 --no-configuration-cache";
+			shellScript = "cd \"${PROJECT_DIR}/..\"\n./gradlew :shared:linkDebugFrameworkIosSimulatorArm64 :iosApp:assemble --no-configuration-cache";
 		};
 /* End PBXShellScriptBuildPhase section */
 
