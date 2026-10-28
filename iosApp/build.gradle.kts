@@ -47,9 +47,6 @@ kotlin {
         
         val iosMain by creating {
             dependsOn(commonMain)
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
             
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)

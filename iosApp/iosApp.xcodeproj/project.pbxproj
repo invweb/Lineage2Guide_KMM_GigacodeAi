@@ -9,11 +9,9 @@
 /* Begin PBXBuildFile section */
 		2D015EA8D860716AD0EDB0F6 /* shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4FDD6BFF7D5655A3D892BE8 /* shared.framework */; };
 		AD3092C4A3D3D84EE07F58E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E74A92DC060AEBB968C71132 /* Foundation.framework */; };
-		F00815E0308DB22500C319AB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0666C04F5163C24605D10C3D /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0666C04F5163C24605D10C3D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B0F456B3C37B6BB28189362 /* iosApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = iosApp.swift; path = iosApp/iosApp.swift; sourceTree = "<group>"; };
 		74728105C73BF801AB78EA1C /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90BF589E9622B700841F09E4 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = iosApp/ContentView.swift; sourceTree = "<group>"; };
@@ -35,18 +33,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		313396347D8EC0D2D81BB7D0 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				E74A92DC060AEBB968C71132 /* Foundation.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
 		38E2F0EE7FE3125149ACE126 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				313396347D8EC0D2D81BB7D0 /* iOS */,
 				F4FDD6BFF7D5655A3D892BE8 /* shared.framework */,
 			);
 			name = Frameworks;
@@ -69,7 +58,6 @@
 				5B0F456B3C37B6BB28189362 /* iosApp.swift */,
 				90BF589E9622B700841F09E4 /* ContentView.swift */,
 				9F1E6AD2FDBAF93C6C41A7E6 /* ComposeViewController.swift */,
-				0666C04F5163C24605D10C3D /* Info.plist */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,7 +122,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F00815E0308DB22500C319AB /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,7 @@
 package com.zx_tole.lineage2_guide.ui
 
 import androidx.compose.runtime.Composable
+import com.zx_tole.lineage2_guide.data.settings.IOSSettingsManager
 import com.zx_tole.lineage2_guide.di.sharedModule
 import com.zx_tole.lineage2_guide.ui.classes.ClassDetailViewModel
 import com.zx_tole.lineage2_guide.ui.classes.ClassesViewModel
@@ -21,8 +22,6 @@ import org.koin.core.context.stopKoin
 import org.koin.core.component.get
 import platform.UIKit.UIViewController
 
-private const val BASE_URL = "http://localhost:8080"
-
 object IOSKoinManager : KoinComponent {
     var initialized = false
         private set
@@ -41,8 +40,9 @@ object IOSKoinManager : KoinComponent {
     fun init() {
         if (initialized) return
         stopKoin()
+        val settingsManager = IOSSettingsManager()
         startKoin {
-            modules(sharedModule(BASE_URL))
+            modules(sharedModule(settingsManager))
         }
         initialized = true
     }
