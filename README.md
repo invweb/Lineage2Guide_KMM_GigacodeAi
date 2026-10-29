@@ -74,7 +74,7 @@ A comprehensive companion guide app for Lineage 2 (Interlude chronicle) with off
   <em>iOS — Compose Multiplatform UI with Material 3 design</em>
 </p>
 
-### Mobile Application
+### Android Application
 <p align="center">
   <img src="screenshots/splash0.jpg" width="200" alt="Splash Screen"/>
   <img src="screenshots/items.png" width="200" alt="Items Screen"/>
